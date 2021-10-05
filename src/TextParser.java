@@ -6,16 +6,17 @@ import java.util.regex.Pattern;
 public class TextParser
 {
     static String ParseBracketExpr(String exp ){
-        String patternStr = "\\s*\\(\\s*([^\\(\\)]+?)\\s*\\)\\s*";// скобках но без скобок внутри
+        String patternStr = "\\(\\s*([^\\(\\)]+?)\\s*\\)";// скобках но без скобок внутри
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(exp);
         String res ;
         while (matcher.find( )) {
             res =DirectorParser(matcher.group(1));
-            exp = new StringBuilder(exp).replace(matcher.start(0),matcher.end(0), " " + res + " ").toString();
-            exp=  ParseBracketExpr(exp);
+            exp = matcher.replaceFirst(res);
+            matcher = pattern.matcher(exp);
         }
-        exp = DirectorParser(exp);
+        while(DirectorParser(exp) != exp) { exp = DirectorParser(exp);}
+        res = "";
         return exp;
     }
     static String MulDevParser(String exp){
@@ -45,7 +46,7 @@ public class TextParser
             if (Objects.equals(token, "/")) {
                 res = Integer.parseInt(firstNum) / Integer.parseInt(secondNum);
             }
-            exp = new StringBuilder(exp).replace(matcher.start(),matcher.end(),  " "+String.valueOf(res)+" ").toString();
+            exp = matcher.replaceFirst(" " + String.valueOf(res)+" ");
         }
         return exp;
     }
@@ -78,7 +79,7 @@ public class TextParser
             if (Objects.equals(token, "-")) {
                 res = Integer.parseInt(firstNum) - Integer.parseInt(secondNum);
             }
-            exp = new StringBuilder(exp).replace(matcher.start(),matcher.end(),  " "+String.valueOf(res)+" ").toString();
+            exp = matcher.replaceFirst(" " + String.valueOf(res)+" ");
         }
         return exp;
     }
