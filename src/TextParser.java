@@ -15,14 +15,15 @@ public class TextParser
             exp = matcher.replaceFirst(res);
             matcher = pattern.matcher(exp);
         }
-        while(DirectorParser(exp) != exp) { exp = DirectorParser(exp);}
-        res = "";
+        while(DirectorParser(exp) != exp) {
+            exp = DirectorParser(exp);
+        }
         return exp;
     }
     static String MulDevParser(String exp){
         String firstNum,secondNum,token;
         token = "";
-        int res = 0;
+        double res = 0;
 
         String operator = "[*|/]";
         Pattern operatorPattern = Pattern.compile(operator);
@@ -41,10 +42,10 @@ public class TextParser
             }
             secondNum = matcher.group(3);
             if (Objects.equals(token, "*")) {
-                res = Integer.parseInt(firstNum) * Integer.parseInt(secondNum);
+                res = Double.parseDouble(firstNum) * Double.parseDouble(secondNum);
             }
             if (Objects.equals(token, "/")) {
-                res = Integer.parseInt(firstNum) / Integer.parseInt(secondNum);
+                res = Double.parseDouble(firstNum) / Double.parseDouble(secondNum);
             }
             exp = matcher.replaceFirst(" " + String.valueOf(res)+" ");
         }
@@ -55,7 +56,7 @@ public class TextParser
 
         String firstNum,secondNum,token;
         token = "";
-        int res = 0;
+        double res = 0;
 
         String operator = "[+|-]";
         Pattern operatorPattern = Pattern.compile(operator);
@@ -74,12 +75,12 @@ public class TextParser
             }
             secondNum = matcher.group(3);
             if (Objects.equals(token, "+")) {
-                res = Integer.parseInt(firstNum) + Integer.parseInt(secondNum);
+                res = Double.parseDouble(firstNum) + Double.parseDouble(secondNum);
             }
             if (Objects.equals(token, "-")) {
-                res = Integer.parseInt(firstNum) - Integer.parseInt(secondNum);
+                res = Double.parseDouble(firstNum) - Double.parseDouble(secondNum);
             }
-            exp = matcher.replaceFirst(" " + String.valueOf(res)+" ");
+            exp = matcher.replaceFirst(" " + res +" ");
         }
         return exp;
     }
@@ -90,7 +91,7 @@ public class TextParser
         return exp;
     }
     public static void main( String args[] ) {
-        String exp = " Proga (10*(3+(2*1))/2)*(((3)+(1))) 5500 6+8 4kcdsll 78887 3000 ! OK?"; //(10*(3+2)*2)
+        String exp = " Proga (10*(3+(2*1))/(2))*(((3)+(1))) 5500 6+8 4kcdsll 78887 3000 ! OK?"; //(10*(3+2)*2)
         exp = ParseBracketExpr(exp);
         System.out.println(exp);
     }
