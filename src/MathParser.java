@@ -1,21 +1,19 @@
-import java.text.ParseException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TextParser
-{
+public  class MathParser {
     static String ParseBracketExpr(String exp ){
-        String patternStr = "\\(\\s*([^\\(\\)]+?)\\s*\\)";// скобках но без скобок внутри
+        String patternStr = "\\(\\s*([^\\(\\)]+?)\\s*\\)";
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(exp);
         String res ;
         while (matcher.find( )) {
-            res =DirectorParser(matcher.group(1));
+            res = DirectorParser(matcher.group(1));
             exp = matcher.replaceFirst(res);
             matcher = pattern.matcher(exp);
         }
-        while(DirectorParser(exp) != exp) {
+        while( !Objects.equals(DirectorParser(exp), exp)) {
             exp = DirectorParser(exp);
         }
         return exp;
@@ -47,7 +45,8 @@ public class TextParser
             if (Objects.equals(token, "/")) {
                 res = Double.parseDouble(firstNum) / Double.parseDouble(secondNum);
             }
-            exp = matcher.replaceFirst(" " + String.valueOf(res)+" ");
+            exp = matcher.replaceFirst(" " + res);
+            matcher = pattern.matcher(exp);
         }
         return exp;
     }
@@ -80,7 +79,8 @@ public class TextParser
             if (Objects.equals(token, "-")) {
                 res = Double.parseDouble(firstNum) - Double.parseDouble(secondNum);
             }
-            exp = matcher.replaceFirst(" " + res +" ");
+            exp = matcher.replaceFirst(" " + res);
+            matcher = pattern.matcher(exp);
         }
         return exp;
     }
@@ -90,9 +90,8 @@ public class TextParser
         exp = PlusMinusParser(exp);
         return exp;
     }
-    public static void main( String args[] ) {
-        String exp = " Proga (10*(3+(2*1))/(2))*(((3)+(1))) 5500 6+8 4kcdsll 78887 3000 ! OK?"; //(10*(3+2)*2)
+    public static String ParseString( String exp ) {
         exp = ParseBracketExpr(exp);
-        System.out.println(exp);
+        return exp;
     }
 }
